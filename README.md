@@ -1,6 +1,6 @@
 # starter-kit-static
 
-Start your static sites with ease.
+Jade and Sass based starter kit to kick-off your static site development.
 
 ```sh
 $ npm install
