@@ -11,6 +11,7 @@ var imagemin = require('gulp-imagemin');
 var concat = require('gulp-concat');
 var babel = require('gulp-babel');
 var addsrc = require('gulp-add-src');
+var autoprefixer = require('gulp-autoprefixer');
 
 var paths = {
   templates: './source/templates/**/*.jade',
@@ -54,6 +55,10 @@ gulp.task('sass', function() {
   return gulp.src(paths.sass)
     .pipe(isProduction ? gutil.noop() : sourcemaps.init())
     .pipe(sass(sassOptions))
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+      cascade: false
+    }))
     .pipe(isProduction ? gutil.noop() : sourcemaps.write())
     .pipe(connect.reload())
     .pipe(gulp.dest(paths.dist));
