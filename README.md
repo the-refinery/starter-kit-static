@@ -1,4 +1,4 @@
-# starter-kit-static
+# Static Site Starter Kit
 
 Jade and Sass based starter kit to kick-off your static site development.
 
