@@ -1,5 +1,10 @@
 {
   "name": "starter-kit-static",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-refinery/starter-kit-static.git"
+  },
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "bower": "^1.4.1",
