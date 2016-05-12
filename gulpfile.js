@@ -1,5 +1,5 @@
 var gulp = require('gulp');
-var jade = require('gulp-jade');
+var pug = require('gulp-pug');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var source = require('vinyl-source-stream');
@@ -14,7 +14,7 @@ var addsrc = require('gulp-add-src');
 var autoprefixer = require('gulp-autoprefixer');
 
 var paths = {
-  templates: './source/templates/**/*.jade',
+  templates: './source/templates/**/*.pug',
   sass: './source/stylesheets/**/*.scss',
   js: './source/javascripts/**/*.js',
   images: './source/images/**/*',
@@ -26,14 +26,13 @@ var env = process.env.ASSET_ENV || '';
 var isProduction = env.toLowerCase() === 'production';
 
 // Templates
-gulp.task('templates', function() {
-  var YOUR_LOCALS = {};
-  return gulp.src([paths.templates, '!./source/templates/**/_*.jade'])
-    .pipe(jade({
+gulp.task('templates', function buildHTML() {
+  return gulp.src([paths.templates, '!./source/templates/**/_*.pug'])
+    .pipe(pug({
       pretty: !isProduction
     }))
-    .pipe(connect.reload())
     .pipe(gulp.dest(paths.dist))
+    .pipe(connect.reload());
 });
 
 // CSS
@@ -58,9 +57,9 @@ gulp.task('sass', function() {
       browsers: ['last 2 versions'],
       cascade: false
     }))
-    .pipe(isProduction ? gutil.noop() : sourcemaps.write())
-    .pipe(connect.reload())
-    .pipe(gulp.dest(paths.dist));
+    .pipe(isProduction ? gutil.noop() : sourcemaps.write("."))
+    .pipe(gulp.dest(paths.dist + '/stylesheets'))
+    .pipe(connect.reload());
 });
 
 // JS
@@ -82,8 +81,8 @@ gulp.task('js', function () {
     .pipe(concat("application.js"))
     .pipe(isProduction ? gutil.noop() : sourcemaps.write("."))
     .pipe(isProduction ? uglify() : gutil.noop())
-    .pipe(connect.reload())
-    .pipe(gulp.dest(paths.dist));
+    .pipe(gulp.dest(paths.dist + '/javascripts'))
+    .pipe(connect.reload());
 });
 
 // Images
@@ -98,7 +97,8 @@ gulp.task('images', function() {
       svgoPlugins: [{removeViewBox: false}],
       use: []
     }))
-    .pipe(gulp.dest(paths.dist));
+    .pipe(gulp.dest(paths.dist + '/images'))
+    .pipe(connect.reload());
 });
 
 // Public
@@ -106,7 +106,8 @@ gulp.task('images', function() {
 // without any processing.
 gulp.task('public', function() {
   return gulp.src(paths.public)
-    .pipe(gulp.dest(paths.dist));
+    .pipe(gulp.dest(paths.dist))
+    .pipe(connect.reload());
 });
 
 // Server
